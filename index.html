@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lorenzo Arboit</title>
+
+  <!--
+    - favicon
+  -->
+  <link rel="shortcut icon" href="./assets/images/la.png" type="image/png">
+
+
+  <!--
+    - custom css link
+  -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!--
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!--
+    - #MAIN
+  -->
+
+  <main>
+
+    <!--
+      - #SIDEBAR
+    -->
+
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+
+        <figure class="avatar-box">
+          <img src="./assets/images/me.png" alt="Lorenzo Arboit" width="80">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Lorenzo Arboit">Lorenzo Arboit</h1>
+
+          <p class="title">MD, PhD Student</p>
+        </div>
+
+        <ul class="social-list">
+        
+          <!-- LinkedIn -->
+          <li class="social-item">
+            <a href="https://www.linkedin.com/in/lorenzoarboit" class="social-link" target="_blank" rel="noopener noreferrer">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+          </li>
+        
+          <!-- Google Scholar -->
+          <li class="social-item">
+            <a href="https://scholar.google.com/citations?user=WwS3uCwAAAAJ&hl=en&authuser=1" class="social-link" target="_blank" rel="noopener noreferrer">
+              <!-- Ionicons doesn’t have a dedicated Google Scholar icon. You could use 'school-outline' or 'logo-google' as a substitute. -->
+              <ion-icon name="school-outline"></ion-icon>
+            </a>
+          </li>
+        
+          <!-- CV -->
+          <li class="social-item">
+            <a href="./assets/pdf/Resume_Arboit.pdf" class="social-link" target="_blank" rel="noopener noreferrer">
+              <!-- Use an appropriate icon for a document, such as 'document-text-outline' -->
+              <ion-icon name="document-text-outline"></ion-icon>
+            </a>
+          </li>
+          
+          <li class="social-item">
+            <a href="https://www.researchgate.net/profile/Lorenzo-Arboit" class="social-link" target="_blank" rel="noopener noreferrer">
+              <img src="./assets/images/icon-researchgate.svg" alt="ResearchGate" width="18" height="18">
+            </a>
+          </li>
+          
+
+        </ul>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+
+      </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+
+              <a href="mailto:larboit@unistra.fr" class="contact-link">larboit@unistra.fr</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Phone</p>
+
+              <a href="tel:+393801446244" class="contact-link">+39 380 1446244</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="logo-whatsapp"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">WhatsApp</p>
+              <a href="https://wa.me/393801446244" class="contact-link" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+            </div>
+          </li>
+          
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Birthday</p>
+
+              <time datetime="1998-02-09">February 9, 1998</time>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Location</p>
+
+              <address>Strasbourg, France</address>
+            </div>
+
+          </li>
+
+        </ul>
+
+      </div>
+
+    </aside>
+
+
+
+
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+      <!--
+        - #NAVBAR
+      -->
+
+      <nav class="navbar">
+
+        <ul class="navbar-list">
+
+          <li class="navbar-item">
+            <button class="navbar-link  active" data-nav-link>About</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Resume</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Publications</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Conferences</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Contact</button>
+          </li>
+
+        </ul>
+
+      </nav>
+
+
+
+
+
+      <!--
+        - #ABOUT
+      -->
+
+      <article class="about  active" data-page="about">
+
+        <header>
+          <h2 class="h2 article-title">About me</h2>
+        </header>
+
+        <section class="about-text">
+          <p>
+            I am a Medical Doctor and Ph.D. student in Surgical Data Science at the 
+            <a href="https://camma.unistra.fr" class="yellow-link" target="_blank" rel="noopener noreferrer">CAMMA Lab</a>, 
+            under the guidance of 
+            <a href="https://camma.unistra.fr/npadoy/" class="yellow-link" target="_blank" rel="noopener noreferrer">Prof. Nicolas Padoy</a> 
+            and 
+            <a href="https://x.com/p_masca" class="yellow-link" target="_blank" rel="noopener noreferrer">Dr. Pietro Mascagni</a>.
+          </p>
+      
+
+          <p>
+            I'm interested in scaling video-based assessments to explore intraoperative adverse events in a data-driven manner, 
+            analyzing their relationship with postoperative outcomes, and identifying safety checkpoints to mitigate risks.
+            I also aim to develop unimodal and multimodal datasets that emphasize clinical relevance, with a strong 
+            focus on surgical scene descriptions across multiple levels of granularity.
+          </p>
+        </section>
+
+
+        <!--
+          - service
+        -->
+
+        <section class="service">
+
+          <h3 class="h3 service-title">What i'm doing</h3>
+
+          <ul class="service-list">
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <img src="./assets/images/icon-surgery.png" alt="surgery icon" width="40">
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Surgical Data Science</h4>
+                <p class="service-item-text">
+                  Analyzing videos from minimally invasive surgery to extract clincally meaningful insights.
+                </p>
+              </div>
+            </li>
+            
+            <li class="service-item">
+              <div class="service-icon-box">
+                <img src="./assets/images/icon-webdev.png" alt="Web development icon" width="40">
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Software Development</h4>
+                <p class="service-item-text">
+                  Building reliable software tools for clinical research and AI-based user studies.
+                </p>
+              </div>
+            </li>
+            
+            <li class="service-item">
+              <div class="service-icon-box">
+                <img src="./assets/images/icon-research.png" alt="research icon" width="40">
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Clinical Research</h4>
+                <p class="service-item-text">
+                  Collaborating on surgical research projects with several international partners.
+                </p>
+              </div>
+            </li>
+            
+            <li class="service-item">
+              <div class="service-icon-box">
+                <img src="./assets/images/icon-ai.png" alt="ai icon" width="40">
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">AI Modeling</h4>
+                <p class="service-item-text">
+                  Developing clinically-driven datasets that capture the reasoning behind surgical decision-making.
+                </p>
+              </div>
+            </li>
+            
+
+          </ul>
+
+        </section>
+
+
+        <!--
+          - testimonials
+        -->
+
+        
+
+        <section class="testimonials">
+
+          <h3 class="h3 testimonials-title">News</h3>
+
+          <ul class="testimonials-list has-scrollbar">
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/sds.png" alt="Surgical Data Science" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>SDS Summer School</h4>
+
+                <time datetime="2025-02-1" style="display: none;">1 February, 2025</time>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Registration is open for the 2025 edition of the Surgical Data Science Summer School. 
+                    <a href="https://www.edu4sds.org" class="yellow-link" target="_blank" rel="noopener noreferrer">Apply now!</a>
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/sages.png" alt="SAGES" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>SAGES</h4>
+
+                <time datetime="2024-12-14" style="display: none;">14 December, 2024</time>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    My abstract "Development and testing of EndoShare: an application to process 
+                    and deidentify endoscopic videos" was accepted as a poster presentation at the 
+                    SAGES 2025 Annual Meeting in Long Beach, CA.
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <!-- <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-3.png" alt="Emily evans" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Emily evans</h4>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
+                    lot of experience
+                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
+                    consectetur adipiscing
+                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-4.png" alt="Henry william" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Henry william</h4>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
+                    lot of experience
+                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
+                    consectetur adipiscing
+                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
+                  </p>
+                </div>
+
+              </div>
+            </li> -->
+
+          </ul>
+
+        </section>
+
+
+        <!--
+          - testimonials modal
+        -->
+
+        <div class="modal-container" data-modal-container>
+
+          <div class="overlay" data-overlay></div>
+
+          <section class="testimonials-modal">
+
+            <button class="modal-close-btn" data-modal-close-btn>
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+
+            <div class="modal-img-wrapper">
+              <figure class="modal-avatar-box">
+                <img src="./assets/images/avatar-1.png" alt="Daniel lewis" width="80" data-modal-img>
+              </figure>
+
+              <img src="./assets/images/icon-quote.svg" alt="quote icon">
+            </div>
+
+            <div class="modal-content">
+
+              <h4 class="h3 modal-title" data-modal-title>Daniel lewis</h4>
+
+              <time datetime="2021-06-14">14 June, 2021</time>
+
+              <div data-modal-text>
+                <p>
+                  Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
+                  lot of experience
+                  and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
+                  consectetur adipiscing
+                  elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
+                </p>
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+        <!--
+          - supervision
+        -->
+
+        <section class="testimonials">
+
+          <h3 class="h3 testimonials-title">Supervision</h3>
+
+          <ul class="testimonials-list has-scrollbar">
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/students/sarah.png" alt="Sarah Meuli" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Sarah Meuli</h4>
+
+                <time datetime="2025-02-24" style="display: none;">March - April 2025</time>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Medical student at the Humanitas University in Milan. Sarah is working on the following projects:<br><br>
+                    <strong>Gastric Bypass:</strong><br> Assisting in annotating surgical videos with labels for surgical triplets in gastric bypass procedures.<br><br>
+                    <strong>SATISFY:</strong><br> Contributing to refining active video-based surgical training curricula and supporting platform development.                  
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/students/nicolas.png" alt="Nicolas Chanel" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Nicolas Chanel</h4>
+
+                <time datetime="2024-06-24" style="display: none;">July 2024 - ongoing</time>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Medical student at the University of Strasbourg. Nicolas is working on the following projects:<br><br>
+                    <strong>LYSE:</strong><br> Introducing The Critical View Of Safety Assessment In Sentinel Node Dissection For 
+                    Uterine Malignancies: A Step Toward The Use Of Artificial Intelligence To Enhance Surgical Safety And Lymph Node Detection.<br><br>
+                    <strong>CVS Copilot:</strong><br> AI-powered device for real-time assistance during laparoscopic cholecystectomy.
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-3.png" alt="Nabani Banik" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Nabani Banik</h4>
+
+                <time datetime="2024-06-01" style="display: none;">June 2024 - ongoing</time>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Medical student at the University of Strasbourg. Nabani is working on the following projects:<br><br>
+                    <strong>Gastric Bypass:</strong><br> Assisting in annotating surgical videos with labels for surgical triplets in gastric bypass procedures.<br><br>
+                    <strong>MultiColorectal:</strong><br> Defining a surgical workflow in colorectal procedures and annotating surgical videos with phases and steps.
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <!-- <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-3.png" alt="Emily evans" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Emily evans</h4>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
+                    lot of experience
+                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
+                    consectetur adipiscing
+                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
+                  </p>
+                </div>
+
+              </div>
+            </li>
+
+            <li class="testimonials-item">
+              <div class="content-card" data-testimonials-item>
+
+                <figure class="testimonials-avatar-box">
+                  <img src="./assets/images/avatar-4.png" alt="Henry william" width="60" data-testimonials-avatar>
+                </figure>
+
+                <h4 class="h4 testimonials-item-title" data-testimonials-title>Henry william</h4>
+
+                <div class="testimonials-text" data-testimonials-text>
+                  <p>
+                    Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
+                    lot of experience
+                    and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
+                    consectetur adipiscing
+                    elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
+                  </p>
+                </div>
+
+              </div>
+            </li> -->
+
+          </ul>
+
+        </section>
+
+
+        <!--
+          - testimonials modal
+        -->
+
+        <div class="modal-container" data-modal-container>
+
+          <div class="overlay" data-overlay></div>
+
+          <section class="testimonials-modal">
+
+            <button class="modal-close-btn" data-modal-close-btn>
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+
+            <div class="modal-img-wrapper">
+              <figure class="modal-avatar-box">
+                <img src="./assets/images/avatar-1.png" alt="Daniel lewis" width="80" data-modal-img>
+              </figure>
+
+              <img src="./assets/images/icon-quote.svg" alt="quote icon">
+            </div>
+
+            <div class="modal-content">
+
+              <h4 class="h3 modal-title" data-modal-title>Daniel lewis</h4>
+
+              <time datetime="2021-06-14">14 June, 2021</time>
+
+              <div data-modal-text>
+                <p>
+                  Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
+                  lot of experience
+                  and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
+                  consectetur adipiscing
+                  elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
+                </p>
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+        <!--
+          - clients
+        -->
+
+        <section class="clients">
+
+          <h3 class="h3 clients-title">Clinical Partners</h3>
+
+          <ul class="clients-list has-scrollbar">
+
+            <li class="clients-item">
+              <a href="#">
+                <img src="./assets/images/partners/gemelli.png" alt="client logo">
+              </a>
+            </li>
+
+            <li class="clients-item">
+              <a href="#">
+                <img src="./assets/images/partners/images.png" alt="client logo">
+              </a>
+            </li>
+
+            <li class="clients-item">
+              <a href="#">
+                <img src="./assets/images/partners/hum.png" alt="client logo">
+              </a>
+            </li>
+
+            <li class="clients-item">
+              <a href="#">
+                <img src="./assets/images/partners/cagranda.png" alt="client logo">
+              </a>
+            </li>
+
+            <li class="clients-item">
+              <a href="#">
+                <img src="./assets/images/partners/istitutomi.png" alt="client logo">
+              </a>
+            </li>
+
+            <li class="clients-item">
+              <a href="#">
+                <img src="./assets/images/partners/isola.png" alt="client logo">
+              </a>
+            </li>
+
+            <li class="clients-item">
+              <a href="#">
+                <img src="./assets/images/partners/santandrea.png" alt="client logo">
+              </a>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+
+      <!--
+        - #RESUME
+      -->
+
+
+      <article class="resume" data-page="resume">
+
+        <header>
+          <h2 class="h2 article-title">Resume</h2>
+        </header>
+      
+        <section class="timeline">
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+            <h3 class="h3">Education</h3>
+          </div>
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">University of Strasbourg - ITI HealthTech</h4>
+              <span>2024 — Present</span>
+              <p class="timeline-text">
+                Ph.D. in Surgical Data Science (CAMMA Group).
+                Investigating iNTraoperative Events (INTERACT) to reveal anastomotic complications in colorectal surgery 
+                and evaluating outcomes through in-depth video analysis (OPERATE).
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Sant’Anna School of Advanced Studies</h4>
+              <span>2017 — 2024</span>
+              <p class="timeline-text">
+                Master in Medical Sciences (M.Sc.), awarded summa cum laude. Honor Student with a full government-funded scholarship.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">University of Pisa</h4>
+              <span>2017 — 2023</span>
+              <p class="timeline-text">
+                Degree in Medicine and Surgery (M.D.), awarded summa cum laude.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">IRCAD – B.E.S.T Summer School</h4>
+              <span>August 2024</span>
+              <p class="timeline-text">
+                Received the best group project award. Project title: “LapSense”.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Institute of Image-Guided Surgery (IHU Strasbourg) Summer School</h4>
+              <span>July 2023</span>
+              <p class="timeline-text">
+                Surgical Data Science Summer School. Received the best group project award. Project title: “Advancing Precision: AI-Powered Margin Prediction in Lumpectomy for Breast Cancer”.
+              </p>
+            </li>
+          </ol>
+        </section>
+      
+        <section class="timeline">
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="medical-outline"></ion-icon>
+            </div>
+            <h3 class="h3">Work &amp; Research Experience</h3>
+          </div>
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Clinical Research Fellow, CAMMA Group – University of Strasbourg / IHU Strasbourg</h4>
+              <span>2023 — 2024</span>
+              <p class="timeline-text">
+                Developed and tested EndoShare for surgical video management, coordinated the SATISFY project, and contributed to a Generative AI team for laparoscopic image reproduction.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Research Intern, McKay Orthopedic Department – University of Pennsylvania</h4>
+              <span>July — October 2021 &amp; August — December 2022</span>
+              <p class="timeline-text">
+                Investigated the hypoxia pathway’s role in chondrogenesis and performed single-cell RNA sequencing analysis using R and Seurat.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Clinical Intern, Departments of Surgery and Pathology – University of Paris, Hospital Cochin</h4>
+              <span>January — June 2022</span>
+              <p class="timeline-text">
+                Gained clinical exposure in surgical and pathological procedures.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Clinical &amp; Research Intern, Department of Maxillofacial Surgery – University of Udine</h4>
+              <span>September — October 2020 &amp; March — July 2021</span>
+              <p class="timeline-text">
+                Developed an iOS app employing mixed reality to visualize soft tissue on patient-specific skulls, and 
+                tested a generative design approach on Fusion 360 to simulate a temporomandibular joint implant. 
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Clinical Intern, Department of Orthopedic Surgery – University of Pisa</h4>
+              <span>August — October 2019</span>
+              <p class="timeline-text">
+                Analyzed a large dataset of hip implants to design a new prosthetic concept through finite element analysis of stress loads.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Research Intern, Centre Interdisciplinaire de Recherche en Biologie – Collège de France</h4>
+              <span>August — September 2018</span>
+              <p class="timeline-text">
+                Participated in interdisciplinary research projects in neuroscience.
+              </p>
+            </li>
+          </ol>
+        </section>
+      
+        <section class="timeline">
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="code-slash-outline"></ion-icon>
+            </div>
+            <h3 class="h3">Courses</h3>
+          </div>
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Deep Learning Specialization – DeepLearning.AI (Coursera)</h4>
+              <span>Fall 2022</span>
+              <p class="timeline-text">
+                Courses include: Neural Networks and Deep Learning (Credential ID VGKMXAPCLVHZ), Improving Deep Neural Networks: Hyperparameter Tuning, Regularization and Optimization (Credential ID LEEDCU3YX7SC), and Structuring Machine Learning Projects (Credential ID MHA53YZ895J2).
+              </p>
+            </li>
+          </ol>
+        </section>
+      
+        <section class="skill">
+          <h3 class="h3 skills-title">My skills</h3>
+          <ul class="skills-list content-card">
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Clinical Research</h5>
+                <data value="80">80%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 80%;"></div>
+              </div>
+            </li>
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Python</h5>
+                <data value="60">60%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 60%;"></div>
+              </div>
+            </li>
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">FFmpeg</h5>
+                <data value="70">70%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 70%;"></div>
+              </div>
+            </li>
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">PyQT</h5>
+                <data value="30">30%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" style="width: 30%;"></div>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </article>
+
+
+      <!--
+        - #PORTFOLIO
+      -->
+
+      <article class="portfolio" data-page="publications">
+
+        <header>
+          <h2 class="h2 article-title">Publications</h2>
+        </header>
+      
+        <section class="projects">
+      
+          <ul class="filter-list">
+            <li class="filter-item">
+              <button class="active" data-filter-btn>All</button>
+            </li>
+            <li class="filter-item">
+              <button data-filter-btn>Clinical</button>
+            </li>
+            <li class="filter-item">
+              <button data-filter-btn>Computer Science</button>
+            </li>
+          </ul>
+      
+          <div class="filter-select-box">
+            <button class="filter-select" data-select>
+              <div class="select-value" data-selecct-value>Select category</div>
+              <div class="select-icon">
+                <ion-icon name="chevron-down"></ion-icon>
+              </div>
+            </button>
+            <ul class="select-list">
+              <li class="select-item">
+                <button data-select-item>All</button>
+              </li>
+              <li class="select-item">
+                <button data-select-item>Clinical</button>
+              </li>
+              <li class="select-item">
+                <button data-select-item>Computer Science</button>
+              </li>
+            </ul>
+          </div>
+      
+          <ul class="project-list">
+
+            <!-- Publication 6 -->
+            <li class="project-item active" data-filter-item data-category="computer science">
+              <a href="#" class="publication-trigger">
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                  <img src="./assets/images/papers/paper-6.jpg" alt="Publication 5" loading="lazy">
+                </figure>
+                <h3 class="project-title">
+                  Surgical text-to-image generation. (2025)
+                </h3>
+                <p class="project-category" style="display: none;">Computer Science</p>
+              </a>
+              <div class="project-summary" style="display: none;">
+                <p>
+                  <strong>Authors:</strong><br>
+                  Chinedu Innocent Nwoye, Rupak Bose, Kareem Elgohary, Lorenzo Arboit, Giorgio Carlino, Joël L. Lavanchy, Pietro Mascagni, Nicolas Padoy.<br>
+                  <strong>Journal:</strong><br>
+                  Pattern Recognition Letters<br>
+                  <strong>Summary:</strong><br>
+                  This paper introduces Surgical Imagen, a diffusion-based text-to-image generative model designed to synthesize photorealistic surgical images from triplet-based textual prompts. By leveraging advanced language models and diffusion techniques, the model addresses challenges in surgical data scarcity and high annotation costs, yielding images that closely mirror real surgical scenarios.
+                </p>
+                <a href="https://doi.org/10.1016/j.patrec.2025.02.002" target="_blank">View Publication</a>
+              </div>
+            </li>
+            
+
+            <!-- Publication 5 -->
+            <li class="project-item active" data-filter-item data-category="clinical">
+              <a href="#" class="publication-trigger">
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                  <img src="./assets/images/papers/paper-5.png" alt="Publication 5" loading="lazy">
+                </figure>
+                <h3 class="project-title">
+                  Optimizing efficiency in the creation of patient-specific plates through field-driven generative design in maxillofacial surgery. (2023)
+                </h3>
+                <p class="project-category" style="display: none;">Clinical</p>
+              </a>
+              <div class="project-summary" style="display: none;">
+                <p>
+                  <strong>Authors:</strong><br> Tel, A., Kornfellner, E., Moscato, F., Vinayhalingam S., Xi T., Arboit L., Robiony M.<br>
+                  <strong>Journal:</strong><br> Scientific Reports<br>
+                  <strong>Summary:</strong><br> This paper presents a novel generative design approach for creating patient-specific plates in maxillofacial surgery, optimizing efficiency and customization.
+                </p>
+                <a href="https://doi.org/10.1038/s41598-023-39327-8" target="_blank">View Publication</a>
+              </div>
+            </li>
+      
+            <!-- Publication 4 -->
+            <li class="project-item active" data-filter-item data-category="clinical">
+              <a href="#" class="publication-trigger">
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                  <img src="./assets/images/papers/paper-4.png" alt="Publication 4" loading="lazy">
+                </figure>
+                <h3 class="project-title">
+                  A systematic review of the software used for virtual surgical planning
+                  in craniomaxillofacial surgery over the last decade. (2022)
+                </h3>
+                <p class="project-category" style="display: none;">Clinical</p>
+              </a>
+              <div class="project-summary" style="display: none;">
+                <p>
+                  <strong>Authors:</strong><br> Tel, A., Arboit, L., De Martino, M., Isola, M., Sembronio, S., Robiony, M.<br>
+                  <strong>Journal:</strong><br> International Journal of Oral &amp; Maxillofacial Surgery<br>
+                  <strong>Summary:</strong><br> This systematic review evaluates various software tools employed in virtual surgical planning, summarizing trends, capabilities, and limitations observed over the past decade.
+                </p>
+                <a href="https://www.ijoms.com/article/S0901-5027(22)00461-1/abstract" target="_blank">View Publication</a>
+              </div>
+            </li>
+
+            <!-- Publication 3 -->
+            <li class="project-item active" data-filter-item data-category="clinical">
+              <a href="#" class="publication-trigger">
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                  <img src="./assets/images/papers/paper-3.jpg" alt="Publication 3" loading="lazy">
+                </figure>
+                <h3 class="project-title">
+                  Oxidative phosphorylation in bone cells. (2023)
+                </h3>
+                <p class="project-category" style="display: none;">Clinical</p>
+              </a>
+              <div class="project-summary" style="display: none;">
+                <p>
+                  <strong>Authors:</strong><br> Sabini, E., Arboit, L., Khan, M.P., Lanzolla, G., Schipani, E.<br>
+                  <strong>Journal:</strong><br> Bone Reports<br>
+                  <strong>Summary:</strong><br> This research investigates the role of oxidative phosphorylation in bone cells, offering insights into bone metabolism and identifying potential therapeutic targets.
+                </p>
+                <a href="https://doi.org/10.1016/j.bonr.2023.101688" target="_blank">View Publication</a>
+              </div>
+            </li>
+
+            <!-- Publication 2 -->
+            <li class="project-item active" data-filter-item data-category="clinical">
+              <a href="#" class="publication-trigger">
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                  <img src="./assets/images/papers/paper-2.jpg" alt="Publication 2" loading="lazy">
+                </figure>
+                <h3 class="project-title">
+                  The Transantral Endoscopic Approach: A Portal for Masses of the Inferior Orbit—Improving
+                  Surgeons' Experience Through Virtual Endoscopy and Augmented Reality. (2021)
+                </h3>
+                <p class="project-category" style="display: none;">Clinical</p>
+              </a>
+              <div class="project-summary" style="display: none;">
+                <p>
+                  <strong>Authors:</strong><br> Tel, A., Arboit, L., Sembronio, S., Costa, F., Nocini, R., Robiony, M.<br>
+                  <strong>Journal:</strong><br> Frontiers in Surgery<br>
+                  <strong>Summary:</strong><br> This study introduces a transantral endoscopic approach that leverages virtual endoscopy and augmented reality to enhance surgical experience in orbital procedures.
+                </p>
+                <a href="https://doi.org/10.3389/fsurg.2021.715262" target="_blank">View Publication</a>
+              </div>
+            </li>
+      
+            <!-- Publication 1 -->
+            <li class="project-item active" data-filter-item data-category="clinical">
+              <a href="#" class="publication-trigger">
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                  <img src="./assets/images/papers/paper-1.jpg" alt="Publication 1" loading="lazy">
+                </figure>
+                <h3 class="project-title">
+                  Working in the era of COVID-19: An organization model for maxillofacial surgery 
+                  based on telemedicine and video consultation. (2021)
+                </h3>
+                <p class="project-category" style="display: none;">Clinical</p>
+              </a>
+              <div class="project-summary" style="display: none;">
+                <p>
+                  <strong>Authors:</strong><br> Robiony, M., Bocin, E., Sembronio, S., Costa, F., Arboit, L., Tel, A.<br>
+                  <strong>Journal:</strong><br> Journal of Cranio-Maxillofacial Surgery<br>
+                  <strong>Summary:</strong><br> This paper outlines an organizational model for maxillofacial surgery during the COVID-19 era, focusing on the integration of telemedicine and video consultations.
+                </p>
+                <a href="https://doi.org/10.1016/j.jcms.2021.01.027" target="_blank">View Publication</a>
+              </div>
+            </li>
+
+      
+          </ul>
+      
+        </section>
+      
+      </article>
+      
+
+      <!--
+        - #CONFERENCES
+      -->
+
+      <article class="blog" data-page="conferences">
+
+        <header>
+          <h2 class="h2 article-title">Conferences</h2>
+        </header>
+
+        <section class="blog-posts">
+
+          <ul class="blog-posts-list">
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/conferences/edu4sds23_logo-1.png" alt="Design conferences in 2022" loading="lazy">
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">Summer School</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2024-07-15">July 15, 2024</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">Surgical Data Science Summer School</h3>
+
+                  <p class="blog-text">
+                    Lecture - SDS: How to Start
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+            <li class="blog-post-item">
+              <a href="#">
+
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/conferences/eaes24.png" alt="Best fonts every designer" loading="lazy">
+                </figure>
+
+                <div class="blog-content">
+
+                  <div class="blog-meta">
+                    <p class="blog-category">Conference</p>
+
+                    <span class="dot"></span>
+
+                    <time datetime="2024-06-11">June 11, 2024</time>
+                  </div>
+
+                  <h3 class="h3 blog-item-title">EAES Annual Congress 2024</h3>
+
+                  <p class="blog-text">
+                    Oral Presentation - SurgiShare: A Public Software Solution for Secure and Efficient 
+                    Sharing of Surgical and Endoscopic Videos in Medical Research
+                  </p>
+
+                </div>
+
+              </a>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+
+
+
+
+      <!--
+        - #CONTACT
+      -->
+
+      <article class="contact" data-page="contact">
+
+        <header>
+          <h2 class="h2 article-title">Contact</h2>
+        </header>
+
+        <section class="mapbox" data-mapbox>
+          <figure>
+            <iframe
+              src="https://www.google.com/maps?q=1%20Place%20de%20l'Hopital%20Strasbourg%2C%20France&z=12&output=embed"
+              width="400" height="300" loading="lazy"></iframe>
+          </figure>
+        </section>
+
+        <section class="contact-form">
+
+          <h3 class="h3 form-title">Contact Form</h3>
+
+          <form action="#" class="form" data-form>
+
+            <div class="input-wrapper">
+              <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
+
+              <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
+            </div>
+
+            <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
+
+            <button class="form-btn" type="submit" disabled data-form-btn>
+              <ion-icon name="paper-plane"></ion-icon>
+              <span>Send Message</span>
+            </button>
+
+          </form>
+
+        </section>
+
+      </article>
+
+    </div>
+
+  </main>
+
+
+
+
+
+
+  <!--
+    - custom js link
+  -->
+  <script src="./assets/js/script.js"></script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>
