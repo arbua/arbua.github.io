@@ -1864,17 +1864,20 @@ textarea.form-input::-webkit-resizer { display: none; }
   }
 
   .yellow-link {
-    display: inline;
-    color: var(--orange-yellow-crayola);
+    display: inline-block; /* better for touch devices */
+    color: var(--orange-yellow-crayola, #FFA500); /* fallback to an orange hue if the variable isn’t defined */
     text-decoration: none;
-    transition: var(--transition-1);
+    transition: var(--transition-1, 0.3s ease); /* fallback transition */
+    -webkit-tap-highlight-color: transparent; /* removes the default tap highlight on mobile */
   }
   
   .yellow-link:hover,
-  .yellow-link:focus {
+  .yellow-link:focus,
+  .yellow-link:active {
     text-decoration: underline;
-    color: var(--orange-yellow-crayola);
+    color: var(--orange-yellow-crayola, #FFA500);
   }
+  
   
 
 
