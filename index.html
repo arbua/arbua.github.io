@@ -9,6 +9,12 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
+    // Disable cookies for Google Analytics
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied'
+    });
+
     gtag('config', 'G-EWT5130BZE', {
     'storage': 'none', // Prevents GA from storing cookies
     'anonymize_ip': true // Hides user IP addresses (GDPR-compliant)
