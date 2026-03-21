@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# macOS
+**/.DS_Store
+
+# Local automation files (keep local, don't push)
+scripts/
+data/
+requirements.txt
+README.md
+.github/workflows/sync-publications.yml
