@@ -1480,7 +1480,12 @@
 
           <h3 class="h3 form-title">Contact Form</h3>
 
-          <form action="#" class="form" data-form>
+          <form action="https://formsubmit.co/larboit@unistra.fr" method="POST" class="form" data-form data-form-endpoint="https://formsubmit.co/ajax/larboit@unistra.fr">
+
+            <input type="hidden" name="_subject" value="Website contact form message">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            <input type="text" name="_honey" style="display:none">
 
             <div class="input-wrapper">
               <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
@@ -1494,6 +1499,8 @@
               <ion-icon name="paper-plane"></ion-icon>
               <span>Send Message</span>
             </button>
+
+            <p data-form-status style="margin-top: 12px; font-size: 14px;"></p>
 
           </form>
 

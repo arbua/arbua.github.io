@@ -131,6 +131,7 @@ for (let i = 0; i < filterBtn.length; i++) {
 const form = document.querySelector("[data-form]");
 const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
+const formStatus = document.querySelector("[data-form-status]");
 
 // add event to all form input field
 for (let i = 0; i < formInputs.length; i++) {
@@ -143,6 +144,66 @@ for (let i = 0; i < formInputs.length; i++) {
       formBtn.setAttribute("disabled", "");
     }
 
+  });
+}
+
+if (form) {
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (!form.checkValidity()) return;
+
+    const formButtonLabel = formBtn.querySelector("span");
+    const originalLabel = formButtonLabel ? formButtonLabel.textContent : "Send Message";
+    const endpoint = form.dataset.formEndpoint || "https://formsubmit.co/ajax/larboit@unistra.fr";
+    const formData = new FormData(form);
+
+    const payload = {
+      name: (formData.get("fullname") || "").toString(),
+      email: (formData.get("email") || "").toString(),
+      message: (formData.get("message") || "").toString(),
+      _subject: (formData.get("_subject") || "Website contact form message").toString(),
+      _template: (formData.get("_template") || "table").toString(),
+      _captcha: (formData.get("_captcha") || "false").toString(),
+      _honey: (formData.get("_honey") || "").toString()
+    };
+
+    formBtn.setAttribute("disabled", "");
+    if (formButtonLabel) formButtonLabel.textContent = "Sending...";
+    if (formStatus) {
+      formStatus.textContent = "Sending your message...";
+      formStatus.style.color = "#f4b400";
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+
+      form.reset();
+      formBtn.setAttribute("disabled", "");
+
+      if (formStatus) {
+        formStatus.textContent = "Message sent successfully. Thank you!";
+        formStatus.style.color = "#45e28a";
+      }
+    } catch (error) {
+      if (formStatus) {
+        formStatus.textContent = "Unable to send right now. Please try again in a moment.";
+        formStatus.style.color = "#ff6b6b";
+      }
+    } finally {
+      if (formButtonLabel) formButtonLabel.textContent = originalLabel;
+    }
   });
 }
 
