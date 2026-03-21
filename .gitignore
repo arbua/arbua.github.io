@@ -8,7 +8,9 @@ __pycache__/
 **/.DS_Store
 
 # Local automation files (keep local, don't push)
-scripts/
+scripts/*
+!scripts/
+!scripts/sync_publications.py
 data/
 requirements.txt
 README.md
