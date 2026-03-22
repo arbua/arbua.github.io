@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 import argparse
+import hashlib
 import html
 import json
 import os
 import re
-import uuid
 import subprocess
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urljoin
 
 import requests
 from scholarly import scholarly
@@ -369,7 +370,7 @@ def parse_local_paper_image_path(image_src: str) -> Optional[Path]:
     candidate = Path(normalized)
     if candidate.parent.as_posix() != PAPERS_DIR.as_posix():
         return None
-    if not re.match(r"^paper-\d+\.(jpg|jpeg|png|webp)$", candidate.name, flags=re.IGNORECASE):
+    if candidate.suffix.lower() not in LOCAL_IMAGE_EXTENSIONS:
         return None
 
     return Path(candidate.as_posix())
@@ -396,67 +397,102 @@ def discover_local_images(repo_root: Path) -> dict[int, Path]:
     return by_index
 
 
-def safe_batch_rename(repo_root: Path, rename_pairs: list[tuple[Path, Path]]) -> None:
-    effective_pairs: list[tuple[Path, Path]] = []
-    seen_src: set[Path] = set()
-    for src_rel, dst_rel in rename_pairs:
-        src_abs = (repo_root / src_rel).resolve()
-        dst_abs = (repo_root / dst_rel).resolve()
-        if src_abs == dst_abs:
-            continue
-        if src_abs in seen_src:
-            continue
-        if not src_abs.exists():
-            continue
-        seen_src.add(src_abs)
-        effective_pairs.append((src_rel, dst_rel))
+def extract_og_or_twitter_image(page_html: str, base_url: str) -> str:
+    patterns = [
+        r'<meta\s+property=["\']og:image["\']\s+content=["\']([^"\']+)["\']',
+        r'<meta\s+content=["\']([^"\']+)["\']\s+property=["\']og:image["\']',
+        r'<meta\s+name=["\']twitter:image["\']\s+content=["\']([^"\']+)["\']',
+        r'<meta\s+content=["\']([^"\']+)["\']\s+name=["\']twitter:image["\']',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, page_html, flags=re.IGNORECASE)
+        if match:
+            return urljoin(base_url, match.group(1).strip())
+    return ""
 
-    if not effective_pairs:
-        return
 
-    moving_sources = {(repo_root / src_rel).resolve() for src_rel, _ in effective_pairs}
-    temp_moves: list[tuple[Path, Path, Path]] = []
+def infer_image_extension(image_url: str, content_type: str) -> str:
+    ct = (content_type or "").lower()
+    if "png" in ct:
+        return ".png"
+    if "webp" in ct:
+        return ".webp"
+    if "jpeg" in ct or "jpg" in ct:
+        return ".jpg"
 
-    for src_rel, dst_rel in effective_pairs:
-        src_abs = (repo_root / src_rel).resolve()
-        temp_name = f"{src_abs.name}.tmp.{uuid.uuid4().hex}"
-        temp_abs = src_abs.with_name(temp_name)
-        src_abs.rename(temp_abs)
-        temp_moves.append((temp_abs, src_abs, (repo_root / dst_rel).resolve()))
+    parsed = Path(image_url.split("?", 1)[0])
+    suffix = parsed.suffix.lower()
+    if suffix in LOCAL_IMAGE_EXTENSIONS:
+        return suffix
+    return ".jpg"
 
-    for temp_abs, original_abs, dst_abs in temp_moves:
-        dst_abs.parent.mkdir(parents=True, exist_ok=True)
-        if dst_abs.exists() and dst_abs not in moving_sources:
-            temp_abs.rename(original_abs)
+
+def auto_download_publication_image(
+    publication: Publication,
+    repo_root: Path,
+    publication_number: int,
+    timeout: int = 12,
+) -> str:
+    candidate_pages = [publication.journal_link, publication.link, publication.arxiv_link]
+    candidate_pages = [page for page in candidate_pages if page and page.startswith("http")]
+
+    if not candidate_pages:
+        return ""
+
+    publication_hash = hashlib.sha1(publication_key(publication.title, publication.year).encode("utf-8")).hexdigest()[:10]
+    base_name = f"paper-{publication_number}-auto-{publication_hash}"
+    papers_abs = repo_root / PAPERS_DIR
+    papers_abs.mkdir(parents=True, exist_ok=True)
+
+    existing_matches = list(papers_abs.glob(f"{base_name}.*"))
+    for existing in existing_matches:
+        if existing.suffix.lower() in LOCAL_IMAGE_EXTENSIONS:
+            return f"./{existing.relative_to(repo_root).as_posix()}"
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36"
+    }
+
+    for page_url in candidate_pages:
+        try:
+            page_response = requests.get(page_url, timeout=timeout, headers=headers)
+            if not page_response.ok:
+                continue
+
+            image_url = extract_og_or_twitter_image(page_response.text, page_url)
+            if not image_url or not image_url.startswith("http"):
+                continue
+
+            image_response = requests.get(image_url, timeout=timeout, headers=headers)
+            if not image_response.ok:
+                continue
+
+            content_type = image_response.headers.get("Content-Type", "")
+            if content_type and not content_type.lower().startswith("image/"):
+                continue
+
+            extension = infer_image_extension(image_url, content_type)
+            destination_rel = PAPERS_DIR / f"{base_name}{extension}"
+            destination_abs = repo_root / destination_rel
+
+            if destination_abs.exists():
+                return f"./{destination_rel.as_posix()}"
+
+            destination_abs.write_bytes(image_response.content)
+            return f"./{destination_rel.as_posix()}"
+        except requests.RequestException:
             continue
-        temp_abs.rename(dst_abs)
+
+    return ""
 
 
 def resolve_publication_images(
     publications: list[Publication],
     image_overrides: dict[str, str],
     repo_root: Path,
+    auto_fetch_images: bool,
 ) -> None:
-    rename_pairs: list[tuple[Path, Path]] = []
     total_count = len(publications)
-
-    for position, publication in enumerate(publications, start=1):
-        publication_number = publication_number_for_position(total_count=total_count, position=position)
-        key = publication_key(publication.title, publication.year)
-        override = image_overrides.get(key, "")
-        local_override = parse_local_paper_image_path(override)
-        if not local_override:
-            continue
-
-        source_abs = repo_root / local_override
-        if not source_abs.exists():
-            continue
-
-        desired_rel = PAPERS_DIR / f"paper-{publication_number}{local_override.suffix.lower()}"
-        if local_override != desired_rel:
-            rename_pairs.append((local_override, desired_rel))
-
-    safe_batch_rename(repo_root=repo_root, rename_pairs=rename_pairs)
     indexed_local_images = discover_local_images(repo_root=repo_root)
 
     for position, publication in enumerate(publications, start=1):
@@ -466,15 +502,24 @@ def resolve_publication_images(
         local_override = parse_local_paper_image_path(override)
 
         if local_override:
-            desired_rel = PAPERS_DIR / f"paper-{publication_number}{local_override.suffix.lower()}"
-            if (repo_root / desired_rel).exists():
-                publication.image_src = f"./{desired_rel.as_posix()}"
+            if (repo_root / local_override).exists():
+                publication.image_src = f"./{local_override.as_posix()}"
                 continue
 
         indexed_local = indexed_local_images.get(publication_number)
         if indexed_local and (repo_root / indexed_local).exists():
             publication.image_src = f"./{indexed_local.as_posix()}"
             continue
+
+        if auto_fetch_images:
+            auto_image = auto_download_publication_image(
+                publication=publication,
+                repo_root=repo_root,
+                publication_number=publication_number,
+            )
+            if auto_image:
+                publication.image_src = auto_image
+                continue
 
         publication.image_src = placeholder_image(publication_number, publication.title)
 
@@ -514,11 +559,39 @@ def existing_image_overrides(index_html_path: Path) -> dict[str, str]:
     return overrides
 
 
+def existing_publication_cards(index_html_path: Path) -> dict[str, str]:
+    if not index_html_path.exists():
+        return {}
+
+    content = index_html_path.read_text(encoding="utf-8")
+    if START_MARKER not in content or END_MARKER not in content:
+        return {}
+
+    _, remainder = content.split(START_MARKER, 1)
+    block, _ = remainder.split(END_MARKER, 1)
+
+    card_pattern = re.compile(r'(<li class="project-item active"[^>]*>[\s\S]*?</li>)', flags=re.DOTALL)
+    title_pattern = re.compile(r'<h3 class="project-title">(.*?)</h3>', flags=re.DOTALL)
+
+    cards: dict[str, str] = {}
+    for card_html in card_pattern.findall(block):
+        title_match = title_pattern.search(card_html)
+        if not title_match:
+            continue
+
+        parsed_title = re.sub(r"<[^>]+>", "", title_match.group(1))
+        title, year = parse_formatted_title(parsed_title)
+        cards[publication_key(title, year)] = card_html.strip()
+
+    return cards
+
+
 def fetch_scholar_publications(
     user_id: str,
     max_items: int,
     image_overrides: dict[str, str],
     repo_root: Path,
+    auto_fetch_images: bool,
 ) -> list[Publication]:
     author = scholarly.search_author_id(user_id)
     author = scholarly.fill(author, sections=["publications"])
@@ -602,7 +675,12 @@ def fetch_scholar_publications(
         )
 
     results.sort(key=lambda item: (item.year or 0, item.title.lower()), reverse=True)
-    resolve_publication_images(publications=results, image_overrides=image_overrides, repo_root=repo_root)
+    resolve_publication_images(
+        publications=results,
+        image_overrides=image_overrides,
+        repo_root=repo_root,
+        auto_fetch_images=auto_fetch_images,
+    )
     return results
 
 
@@ -612,11 +690,26 @@ def format_title(title: str, year: Optional[int]) -> str:
     return title
 
 
-def render_publications_html(publications: list[Publication]) -> str:
+def render_publications_html(
+    publications: list[Publication],
+    existing_cards: dict[str, str],
+    preserve_existing_cards: bool,
+) -> str:
     lines: list[str] = []
     total_count = len(publications)
     for position, publication in enumerate(publications, start=1):
         publication_number = publication_number_for_position(total_count=total_count, position=position)
+        key = publication_key(publication.title, publication.year)
+
+        if preserve_existing_cards and key in existing_cards:
+            lines.extend(
+                [
+                    f"            <!-- Publication {publication_number} -->",
+                    f"            {existing_cards[key]}",
+                    "",
+                ]
+            )
+            continue
 
         summary_id = f"publication-summary-{publication_number}"
         cta_lines: list[str] = []
@@ -739,6 +832,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-git", action="store_true", help="Do not commit or push changes")
     parser.add_argument("--no-push", action="store_true", help="Commit only; do not push")
     parser.add_argument(
+        "--no-preserve-existing",
+        action="store_true",
+        help="Regenerate all publication cards instead of preserving existing card HTML for known publications",
+    )
+    parser.add_argument(
+        "--no-auto-image-fetch",
+        action="store_true",
+        help="Disable automatic remote image retrieval for publications without local images",
+    )
+    parser.add_argument(
         "--commit-message",
         default=f"chore(publications): sync scholar {datetime.utcnow().date().isoformat()}",
         help="Commit message for publication sync",
@@ -753,17 +856,23 @@ def main() -> None:
     publications_html_path = repo_root / "partials" / "publications.html"
     data_json_path = repo_root / "data" / "publications.json"
     image_overrides = existing_image_overrides(index_html_path=publications_html_path)
+    existing_cards = existing_publication_cards(index_html_path=publications_html_path)
 
     publications = fetch_scholar_publications(
         user_id=args.scholar_user,
         max_items=args.max_items,
         image_overrides=image_overrides,
         repo_root=repo_root,
+        auto_fetch_images=not args.no_auto_image_fetch,
     )
     if not publications:
         raise RuntimeError("No publications were fetched from Google Scholar.")
 
-    publications_html = render_publications_html(publications)
+    publications_html = render_publications_html(
+        publications=publications,
+        existing_cards=existing_cards,
+        preserve_existing_cards=not args.no_preserve_existing,
+    )
     replace_publications_block(index_html_path=publications_html_path, publications_html=publications_html)
     write_publications_json(publications=publications, output_path=data_json_path)
 
