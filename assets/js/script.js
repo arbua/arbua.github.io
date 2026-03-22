@@ -65,18 +65,24 @@ function initPublicationFilter() {
   const selectValue = document.querySelector('[data-selecct-value]');
   const filterButtons = document.querySelectorAll('[data-filter-btn]');
   const filterItems = document.querySelectorAll('[data-filter-item]');
+  const searchInput = document.querySelector('[data-publication-search]');
 
   if (!select || !selectValue || !filterButtons.length || !filterItems.length) return;
 
-  const filterFunc = function (selectedValue) {
+  let selectedCategory = 'all';
+  let searchQuery = '';
+
+  const applyFilters = function () {
     for (let i = 0; i < filterItems.length; i++) {
-      if (selectedValue === 'all') {
-        filterItems[i].classList.add('active');
-      } else if (selectedValue === (filterItems[i].dataset.category || '')) {
-        filterItems[i].classList.add('active');
-      } else {
-        filterItems[i].classList.remove('active');
-      }
+      const category = (filterItems[i].dataset.category || '').toLowerCase();
+      const title = filterItems[i].querySelector('.project-title')?.textContent.toLowerCase() || '';
+      const summary = filterItems[i].querySelector('.project-summary')?.textContent.toLowerCase() || '';
+      const searchableText = `${title} ${summary}`;
+
+      const matchesCategory = selectedCategory === 'all' || selectedCategory === category;
+      const matchesSearch = !searchQuery || searchableText.includes(searchQuery);
+
+      filterItems[i].classList.toggle('active', matchesCategory && matchesSearch);
     }
   };
 
@@ -86,25 +92,34 @@ function initPublicationFilter() {
 
   for (let i = 0; i < selectItems.length; i++) {
     selectItems[i].addEventListener('click', function () {
-      const selectedValue = this.innerText.toLowerCase();
+      selectedCategory = this.innerText.toLowerCase();
       selectValue.innerText = this.innerText;
       elementToggleFunc(select);
-      filterFunc(selectedValue);
+      applyFilters();
     });
   }
 
   let lastClickedBtn = filterButtons[0];
   for (let i = 0; i < filterButtons.length; i++) {
     filterButtons[i].addEventListener('click', function () {
-      const selectedValue = this.innerText.toLowerCase();
+      selectedCategory = this.innerText.toLowerCase();
       selectValue.innerText = this.innerText;
-      filterFunc(selectedValue);
+      applyFilters();
 
       if (lastClickedBtn) lastClickedBtn.classList.remove('active');
       this.classList.add('active');
       lastClickedBtn = this;
     });
   }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      searchQuery = this.value.trim().toLowerCase();
+      applyFilters();
+    });
+  }
+
+  applyFilters();
 }
 
 function initContactForm() {

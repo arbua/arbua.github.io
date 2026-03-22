@@ -33,6 +33,8 @@ class Publication:
     category_label: str
     image_src: str
     link: str
+    journal_link: str
+    arxiv_link: str
     doi: str
     abstract: str
 
@@ -151,8 +153,19 @@ def generate_summary(abstract: str, title: str) -> str:
     return base
 
 
-def categorize(title: str, journal: str, abstract: str) -> tuple[str, str]:
-    text = f"{title} {journal} {abstract}".lower()
+def categorize(title: str, journal: str, abstract: str, link: str = "") -> tuple[str, str]:
+    text = f"{title} {journal} {abstract} {link}".lower()
+
+    book_chapter_keywords = [
+        "book chapter",
+        "springer.com/chapter",
+        "atlas of virtual surgical planning",
+        "(eds)",
+        " in: ",
+    ]
+    if any(keyword in text for keyword in book_chapter_keywords):
+        return "book chapters", "Book Chapters"
+
     cs_keywords = [
         "artificial intelligence",
         "machine learning",
@@ -164,9 +177,42 @@ def categorize(title: str, journal: str, abstract: str) -> tuple[str, str]:
         "algorithm",
         "text-to-image",
         "multimodal",
+        "benchmark",
+        "model",
+        "architecture",
+        "prompt",
         "ai",
     ]
-    if any(keyword in text for keyword in cs_keywords):
+
+    clinical_keywords = [
+        "surgery",
+        "surgical",
+        "clinical",
+        "trial",
+        "patient",
+        "cancer",
+        "gynecological",
+        "colorectal",
+        "sentinel",
+        "lymph",
+        "workflow",
+        "hysterectomy",
+        "endometrial",
+        "cervical",
+    ]
+
+    cs_score = sum(1 for keyword in cs_keywords if keyword in text)
+    clinical_score = sum(1 for keyword in clinical_keywords if keyword in text)
+
+    journal_text = (journal or "").lower()
+    if any(token in journal_text for token in ["arxiv", "pattern recognition", "computer", "ieee", "acm"]):
+        cs_score += 2
+    if any(token in journal_text for token in ["surgery", "oncology", "cancer", "clinical", "gynecological", "journal of"]):
+        clinical_score += 2
+
+    if clinical_score > cs_score:
+        return "clinical", "Clinical"
+    if cs_score > 0:
         return "computer science", "Computer Science"
     return "clinical", "Clinical"
 
@@ -183,9 +229,131 @@ def placeholder_image(index: int, title: str) -> str:
         ("065f46", "ecfdf5"),
     ]
     bg, fg = palettes[(index - 1) % len(palettes)]
-    text = re.sub(r"[^A-Za-z0-9 ]+", "", title).strip()[:36] or f"Paper {index}"
-    encoded = requests.utils.quote(f"Paper {index}: {text}")
+    text = re.sub(r"[^A-Za-z0-9 ]+", "", title).strip()[:36] or "Publication"
+    encoded = requests.utils.quote(text)
     return f"https://placehold.co/600x340/{bg}/{fg}?text={encoded}"
+
+
+def is_arxiv_url(url: str) -> bool:
+    value = (url or "").lower()
+    return "arxiv.org" in value
+
+
+def is_preprint_venue(journal: str) -> bool:
+    value = (journal or "").lower()
+    preprint_tokens = [
+        "arxiv",
+        "preprint",
+        "biorxiv",
+        "medrxiv",
+        "unspecified venue",
+    ]
+    return any(token in value for token in preprint_tokens)
+
+
+def normalize_title_for_merge(title: str) -> str:
+    normalized = re.sub(r"[^a-z0-9 ]+", " ", (title or "").lower())
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return normalized
+
+
+def extract_publication_links(pub: dict, doi: str) -> tuple[str, str, str]:
+    candidates: list[str] = []
+    for key in ["pub_url", "eprint_url", "url_scholarbib"]:
+        value = (pub.get(key) or "").strip()
+        if value and value.startswith("http"):
+            candidates.append(value)
+
+    if doi:
+        candidates.append(f"https://doi.org/{doi}")
+
+    deduped_candidates = list(dict.fromkeys(candidates))
+
+    arxiv_link = ""
+    journal_link = ""
+    for candidate in deduped_candidates:
+        if is_arxiv_url(candidate):
+            if not arxiv_link:
+                arxiv_link = candidate
+            continue
+        if not journal_link:
+            journal_link = candidate
+
+    primary_link = journal_link or arxiv_link or "#"
+    return primary_link, journal_link, arxiv_link
+
+
+def choose_preferred_publication(first: Publication, second: Publication) -> tuple[Publication, Publication]:
+    def quality_score(item: Publication) -> int:
+        score = 0
+        if not is_preprint_venue(item.journal):
+            score += 3
+        if item.journal_link:
+            score += 2
+        if item.doi:
+            score += 2
+        if item.abstract:
+            score += 1
+        return score
+
+    first_score = quality_score(first)
+    second_score = quality_score(second)
+    if second_score > first_score:
+        return second, first
+    if first_score > second_score:
+        return first, second
+
+    first_year = first.year or 0
+    second_year = second.year or 0
+    if second_year > first_year:
+        return second, first
+    return first, second
+
+
+def merge_publications(publications: list[Publication]) -> list[Publication]:
+    merged_by_key: dict[str, Publication] = {}
+
+    for publication in publications:
+        key = normalize_title_for_merge(publication.title)
+        if not key:
+            key = publication_key(publication.title, publication.year)
+
+        if key not in merged_by_key:
+            merged_by_key[key] = publication
+            continue
+
+        preferred, secondary = choose_preferred_publication(merged_by_key[key], publication)
+
+        merged_item = Publication(
+            title=preferred.title if len(preferred.title) >= len(secondary.title) else secondary.title,
+            year=max(preferred.year or 0, secondary.year or 0) or None,
+            authors=preferred.authors if len(preferred.authors) >= len(secondary.authors) else secondary.authors,
+            journal=preferred.journal if not is_preprint_venue(preferred.journal) else secondary.journal,
+            summary=preferred.summary if len(preferred.summary) >= len(secondary.summary) else secondary.summary,
+            category_slug=preferred.category_slug,
+            category_label=preferred.category_label,
+            image_src=preferred.image_src,
+            link=preferred.link,
+            journal_link=preferred.journal_link or secondary.journal_link,
+            arxiv_link=preferred.arxiv_link or secondary.arxiv_link,
+            doi=preferred.doi or secondary.doi,
+            abstract=preferred.abstract if len(preferred.abstract) >= len(secondary.abstract) else secondary.abstract,
+        )
+
+        if not merged_item.journal or is_preprint_venue(merged_item.journal):
+            if secondary.journal and not is_preprint_venue(secondary.journal):
+                merged_item.journal = secondary.journal
+
+        if merged_item.journal_link:
+            merged_item.link = merged_item.journal_link
+        elif merged_item.arxiv_link:
+            merged_item.link = merged_item.arxiv_link
+        elif merged_item.doi:
+            merged_item.link = f"https://doi.org/{merged_item.doi}"
+
+        merged_by_key[key] = merged_item
+
+    return list(merged_by_key.values())
 
 
 def parse_local_paper_image_path(image_src: str) -> Optional[Path]:
@@ -346,16 +514,6 @@ def existing_image_overrides(index_html_path: Path) -> dict[str, str]:
     return overrides
 
 
-def publication_link(pub: dict, doi: str) -> str:
-    for key in ["pub_url", "eprint_url", "url_scholarbib"]:
-        value = pub.get(key, "")
-        if value:
-            return value
-    if doi:
-        return f"https://doi.org/{doi}"
-    return "#"
-
-
 def fetch_scholar_publications(
     user_id: str,
     max_items: int,
@@ -366,8 +524,7 @@ def fetch_scholar_publications(
     author = scholarly.fill(author, sections=["publications"])
     publications = author.get("publications", [])[:max_items]
 
-    unique_tracker: set[str] = set()
-    results: list[Publication] = []
+    raw_results: list[Publication] = []
 
     for rank, pub_stub in enumerate(publications, start=1):
         full_pub = scholarly.fill(pub_stub)
@@ -392,11 +549,6 @@ def fetch_scholar_publications(
             full_pub.get("url_scholarbib", ""),
         )
 
-        dedupe_key = doi.lower() if doi else f"{title.lower()}::{year or 'unknown'}"
-        if dedupe_key in unique_tracker:
-            continue
-        unique_tracker.add(dedupe_key)
-
         abstract = (bib.get("abstract") or "").strip()
         openalex_abstract = ""
         openalex_journal = ""
@@ -411,9 +563,9 @@ def fetch_scholar_publications(
         if not journal:
             journal = "Preprint / Unspecified Venue"
 
-        category_slug, category_label = categorize(title=title, journal=journal, abstract=abstract)
+        primary_link, journal_link, arxiv_link = extract_publication_links(pub=full_pub, doi=doi)
+
         summary = generate_summary(abstract=abstract, title=title)
-        link = publication_link(full_pub, doi)
 
         publication = Publication(
             title=title,
@@ -421,14 +573,33 @@ def fetch_scholar_publications(
             authors=authors,
             journal=journal,
             summary=summary,
-            category_slug=category_slug,
-            category_label=category_label,
+            category_slug="",
+            category_label="",
             image_src="",
-            link=link,
+            link=primary_link,
+            journal_link=journal_link,
+            arxiv_link=arxiv_link,
             doi=doi,
             abstract=abstract,
         )
-        results.append(publication)
+
+        publication.category_slug, publication.category_label = categorize(
+            title=publication.title,
+            journal=publication.journal,
+            abstract=publication.abstract,
+            link=publication.link,
+        )
+        raw_results.append(publication)
+
+    results = merge_publications(raw_results)
+
+    for publication in results:
+        publication.category_slug, publication.category_label = categorize(
+            title=publication.title,
+            journal=publication.journal,
+            abstract=publication.abstract,
+            link=publication.link,
+        )
 
     results.sort(key=lambda item: (item.year or 0, item.title.lower()), reverse=True)
     resolve_publication_images(publications=results, image_overrides=image_overrides, repo_root=repo_root)
@@ -469,12 +640,20 @@ def render_publications_html(publications: list[Publication]) -> str:
                 "                  <strong>Summary:</strong><br>",
                 f"                  {html.escape(publication.summary)}",
                 "                </p>",
-                f"                <a href=\"{html.escape(publication.link)}\" target=\"_blank\">View Publication</a>",
                 "              </div>",
                 "            </li>",
                 "",
             ]
         )
+
+        if publication.journal_link:
+            lines.insert(-3, f"                <a href=\"{html.escape(publication.journal_link)}\" target=\"_blank\">View Journal</a>")
+        elif publication.link and publication.link != "#":
+            lines.insert(-3, f"                <a href=\"{html.escape(publication.link)}\" target=\"_blank\">View Publication</a>")
+
+        if publication.arxiv_link and publication.arxiv_link != publication.journal_link:
+            lines.insert(-3, f"                <a href=\"{html.escape(publication.arxiv_link)}\" target=\"_blank\">View arXiv</a>")
+
     return "\n".join(lines).rstrip()
 
 
