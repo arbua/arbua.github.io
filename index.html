@@ -25,6 +25,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lorenzo Arboit</title>
+  <meta name="description" content="Lorenzo Arboit — MD and PhD student in Surgical Data Science. Publications, research projects, awards, and contact information.">
+  <meta name="author" content="Lorenzo Arboit">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://arbua.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lorenzo Arboit">
+  <meta property="og:description" content="MD and PhD student in Surgical Data Science — publications, projects, and contact.">
+  <meta property="og:url" content="https://arbua.github.io/">
+  <meta property="og:image" content="https://arbua.github.io/assets/images/me.png">
+  <meta property="og:site_name" content="Lorenzo Arboit">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lorenzo Arboit">
+  <meta name="twitter:description" content="MD and PhD student in Surgical Data Science — publications, projects, and contact.">
+  <meta name="twitter:image" content="https://arbua.github.io/assets/images/me.png">
 
   <!--
     - favicon
@@ -43,25 +57,56 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Lorenzo Arboit",
+      "url": "https://arbua.github.io/",
+      "image": "https://arbua.github.io/assets/images/me.png",
+      "jobTitle": "MD, PhD Student",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "University of Strasbourg"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/lorenzoarboit",
+        "https://scholar.google.com/citations?user=WwS3uCwAAAAJ",
+        "https://www.researchgate.net/profile/Lorenzo-Arboit",
+        "https://github.com/arbua"
+      ]
+    }
+  </script>
 </head>
 
 <body>
-  <div id="cookie-banner" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background: #1e1e1e; color: white; padding: 12px 20px; text-align: center; z-index: 1000; display: flex; align-items: center; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); font-family: 'Poppins', sans-serif;">
-    <p style="margin: 0; font-size: 14px; flex-grow: 1;">This website uses cookies for analytics. Do you accept?</p>
-    <button onclick="acceptCookies()" style="background: #f4b400; color: black; border: none; padding: 8px 14px; margin-left: 10px; border-radius: 5px; font-size: 14px; cursor: pointer;">Accept</button>
-    <button onclick="declineCookies()" style="background: #555; color: white; border: none; padding: 8px 14px; margin-left: 5px; border-radius: 5px; font-size: 14px; cursor: pointer;">Decline</button>
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie preferences">
+    <p class="cookie-banner-text">This website uses cookies for analytics. Do you accept?</p>
+    <button type="button" onclick="acceptCookies()" class="cookie-banner-btn cookie-banner-btn-accept">Accept</button>
+    <button type="button" onclick="declineCookies()" class="cookie-banner-btn cookie-banner-btn-decline">Decline</button>
   </div>
+
+  <button id="manage-cookies-btn" class="manage-cookies-btn" type="button" onclick="showCookieBanner()">Cookie Preferences</button>
   
   <script>
+    function hideCookieBanner() {
+      document.getElementById("cookie-banner").style.display = "none";
+    }
+
+    function showCookieBanner() {
+      document.getElementById("cookie-banner").style.display = "flex";
+    }
+
     function acceptCookies() {
       localStorage.setItem("cookie_consent", "true");
-      document.getElementById("cookie-banner").style.display = "none";
+      hideCookieBanner();
       loadAnalytics();
     }
   
     function declineCookies() {
       localStorage.setItem("cookie_consent", "false");
-      document.getElementById("cookie-banner").style.display = "none";
+      hideCookieBanner();
     }
   
     function loadAnalytics() {
@@ -82,7 +127,7 @@
     if (localStorage.getItem("cookie_consent") === "true") {
       loadAnalytics();
     } else if (localStorage.getItem("cookie_consent") === "false") {
-      document.getElementById("cookie-banner").style.display = "none";
+      hideCookieBanner();
     }
   </script>
   
@@ -634,50 +679,6 @@
 
 
         <!--
-          - testimonials modal
-        -->
-
-        <div class="modal-container" data-modal-container>
-
-          <div class="overlay" data-overlay></div>
-
-          <section class="testimonials-modal">
-
-            <button class="modal-close-btn" data-modal-close-btn>
-              <ion-icon name="close-outline"></ion-icon>
-            </button>
-
-            <div class="modal-img-wrapper">
-              <figure class="modal-avatar-box">
-                <img src="./assets/images/avatar-1.png" alt="Daniel lewis" width="80" data-modal-img>
-              </figure>
-
-              <img src="./assets/images/icon-quote.svg" alt="quote icon">
-            </div>
-
-            <div class="modal-content">
-
-              <h4 class="h3 modal-title" data-modal-title>Daniel lewis</h4>
-
-              <time datetime="2021-06-14">14 June, 2021</time>
-
-              <div data-modal-text>
-                <p>
-                  Richard was hired to create a corporate identity. We were very pleased with the work done. She has a
-                  lot of experience
-                  and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt
-                  consectetur adipiscing
-                  elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.
-                </p>
-              </div>
-
-            </div>
-
-          </section>
-
-        </div>
-
-        <!--
           - clients
         -->
 
@@ -1011,7 +1012,7 @@
           <figure>
             <iframe
               src="https://www.google.com/maps?q=1%20Place%20de%20l'Hopital%20Strasbourg%2C%20France&z=12&output=embed"
-              width="400" height="300" loading="lazy"></iframe>
+              width="400" height="300" loading="lazy" title="Map showing Strasbourg, France"></iframe>
           </figure>
         </section>
 
@@ -1027,12 +1028,15 @@
             <input type="text" name="_honey" style="display:none">
 
             <div class="input-wrapper">
-              <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
+              <label for="fullname" class="sr-only">Full name</label>
+              <input id="fullname" type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
 
-              <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
+              <label for="email" class="sr-only">Email address</label>
+              <input id="email" type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
             </div>
 
-            <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
+            <label for="message" class="sr-only">Your message</label>
+            <textarea id="message" name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
 
             <button class="form-btn" type="submit" disabled data-form-btn>
               <ion-icon name="paper-plane"></ion-icon>
@@ -1040,6 +1044,13 @@
             </button>
 
             <p data-form-status style="margin-top: 12px; font-size: 14px;"></p>
+
+            <p class="contact-policy-links">
+              By sending this form, you agree to the
+              <a href="./privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+              You can update analytics consent anytime via
+              <button type="button" class="link-button" onclick="showCookieBanner()">Cookie Preferences</button>.
+            </p>
 
           </form>
 

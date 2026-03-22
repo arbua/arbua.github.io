@@ -617,11 +617,30 @@ def render_publications_html(publications: list[Publication]) -> str:
     total_count = len(publications)
     for position, publication in enumerate(publications, start=1):
         publication_number = publication_number_for_position(total_count=total_count, position=position)
+
+        summary_id = f"publication-summary-{publication_number}"
+        cta_lines: list[str] = []
+        seen_links: set[str] = set()
+
+        def add_cta(url: str, label: str) -> None:
+            normalized = (url or "").strip()
+            if not normalized or normalized == "#" or normalized in seen_links:
+                return
+            seen_links.add(normalized)
+            cta_lines.append(
+                f"                <a href=\"{html.escape(normalized)}\" target=\"_blank\" rel=\"noopener noreferrer\">{html.escape(label)}</a>"
+            )
+
+        add_cta(publication.journal_link, "View Journal")
+        if publication.arxiv_link and publication.arxiv_link != publication.journal_link:
+            add_cta(publication.arxiv_link, "View arXiv")
+        add_cta(publication.link, "View Publication")
+
         lines.extend(
             [
                 f"            <!-- Publication {publication_number} -->",
                 f"            <li class=\"project-item active\" data-filter-item data-category=\"{html.escape(publication.category_slug)}\">",
-                "              <a href=\"#\" class=\"publication-trigger\">",
+                f"              <a href=\"#\" class=\"publication-trigger\" role=\"button\" aria-expanded=\"false\" aria-controls=\"{summary_id}\">",
                 "                <figure class=\"project-img\">",
                 "                  <div class=\"project-item-icon-box\">",
                 "                    <ion-icon name=\"eye-outline\"></ion-icon>",
@@ -631,7 +650,7 @@ def render_publications_html(publications: list[Publication]) -> str:
                 f"                <h3 class=\"project-title\">{html.escape(format_title(publication.title, publication.year))}</h3>",
                 f"                <p class=\"project-category\" style=\"display: none;\">{html.escape(publication.category_label)}</p>",
                 "              </a>",
-                "              <div class=\"project-summary\" style=\"display: none;\">",
+                f"              <div class=\"project-summary\" id=\"{summary_id}\" hidden style=\"display: none;\">",
                 "                <p>",
                 "                  <strong>Authors:</strong><br>",
                 f"                  {html.escape(publication.authors)}<br><br>",
@@ -640,19 +659,17 @@ def render_publications_html(publications: list[Publication]) -> str:
                 "                  <strong>Summary:</strong><br>",
                 f"                  {html.escape(publication.summary)}",
                 "                </p>",
+            ]
+        )
+
+        lines.extend(cta_lines)
+        lines.extend(
+            [
                 "              </div>",
                 "            </li>",
                 "",
             ]
         )
-
-        if publication.journal_link:
-            lines.insert(-3, f"                <a href=\"{html.escape(publication.journal_link)}\" target=\"_blank\">View Journal</a>")
-        elif publication.link and publication.link != "#":
-            lines.insert(-3, f"                <a href=\"{html.escape(publication.link)}\" target=\"_blank\">View Publication</a>")
-
-        if publication.arxiv_link and publication.arxiv_link != publication.journal_link:
-            lines.insert(-3, f"                <a href=\"{html.escape(publication.arxiv_link)}\" target=\"_blank\">View arXiv</a>")
 
     return "\n".join(lines).rstrip()
 

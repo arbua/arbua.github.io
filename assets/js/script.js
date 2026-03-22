@@ -66,6 +66,8 @@ function initPublicationFilter() {
   const filterButtons = document.querySelectorAll('[data-filter-btn]');
   const filterItems = document.querySelectorAll('[data-filter-item]');
   const searchInput = document.querySelector('[data-publication-search]');
+  const publicationCount = document.querySelector('[data-publication-count]');
+  const publicationEmpty = document.querySelector('[data-publication-empty]');
 
   if (!select || !selectValue || !filterButtons.length || !filterItems.length) return;
 
@@ -73,6 +75,7 @@ function initPublicationFilter() {
   let searchQuery = '';
 
   const applyFilters = function () {
+    let visibleCount = 0;
     for (let i = 0; i < filterItems.length; i++) {
       const category = (filterItems[i].dataset.category || '').toLowerCase();
       const title = filterItems[i].querySelector('.project-title')?.textContent.toLowerCase() || '';
@@ -82,7 +85,17 @@ function initPublicationFilter() {
       const matchesCategory = selectedCategory === 'all' || selectedCategory === category;
       const matchesSearch = !searchQuery || searchableText.includes(searchQuery);
 
-      filterItems[i].classList.toggle('active', matchesCategory && matchesSearch);
+      const isVisible = matchesCategory && matchesSearch;
+      filterItems[i].classList.toggle('active', isVisible);
+      if (isVisible) visibleCount += 1;
+    }
+
+    if (publicationCount) {
+      publicationCount.textContent = `${visibleCount} publication${visibleCount === 1 ? '' : 's'} shown`;
+    }
+
+    if (publicationEmpty) {
+      publicationEmpty.hidden = visibleCount !== 0;
     }
   };
 
@@ -222,12 +235,25 @@ function initPageNavigation() {
 }
 
 function initPublicationToggles() {
-  document.querySelectorAll('.publication-trigger').forEach(function (trigger) {
+  document.querySelectorAll('.publication-trigger').forEach(function (trigger, index) {
+    const summary = trigger.parentElement.querySelector('.project-summary');
+    if (summary) {
+      const summaryId = summary.id || `publication-summary-${index}`;
+      summary.id = summaryId;
+      summary.hidden = summary.style.display !== 'block';
+      trigger.setAttribute('role', 'button');
+      trigger.setAttribute('aria-controls', summaryId);
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+
     trigger.addEventListener('click', function (event) {
       event.preventDefault();
       const summary = this.parentElement.querySelector('.project-summary');
       if (summary) {
-        summary.style.display = summary.style.display === 'block' ? 'none' : 'block';
+        const shouldExpand = summary.style.display !== 'block';
+        summary.style.display = shouldExpand ? 'block' : 'none';
+        summary.hidden = !shouldExpand;
+        this.setAttribute('aria-expanded', shouldExpand ? 'true' : 'false');
       }
     });
   });
