@@ -531,7 +531,7 @@ def commit_and_push(repo_root: Path, files: list[Path], message: str, should_pus
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Sync publications from Google Scholar into index.html and optionally push changes."
+        description="Sync publications from Google Scholar into partials/publications.html and optionally push changes."
     )
     parser.add_argument("--scholar-user", default=DEFAULT_SCHOLAR_USER, help="Google Scholar user ID")
     parser.add_argument("--max-items", type=int, default=40, help="Maximum number of publications to fetch")
@@ -554,9 +554,9 @@ def main() -> None:
     args = parse_args()
     configure_network_from_env()
     repo_root = Path(args.repo_root).resolve()
-    index_html_path = repo_root / "index.html"
+    publications_html_path = repo_root / "partials" / "publications.html"
     data_json_path = repo_root / "data" / "publications.json"
-    image_overrides = existing_image_overrides(index_html_path=index_html_path)
+    image_overrides = existing_image_overrides(index_html_path=publications_html_path)
 
     publications = fetch_scholar_publications(
         user_id=args.scholar_user,
@@ -568,10 +568,10 @@ def main() -> None:
         raise RuntimeError("No publications were fetched from Google Scholar.")
 
     publications_html = render_publications_html(publications)
-    replace_publications_block(index_html_path=index_html_path, publications_html=publications_html)
+    replace_publications_block(index_html_path=publications_html_path, publications_html=publications_html)
     write_publications_json(publications=publications, output_path=data_json_path)
 
-    print(f"Updated {index_html_path}")
+    print(f"Updated {publications_html_path}")
     print(f"Wrote {data_json_path}")
 
     if args.skip_git:
@@ -580,7 +580,7 @@ def main() -> None:
 
     status = commit_and_push(
         repo_root=repo_root,
-        files=[index_html_path, data_json_path],
+        files=[publications_html_path, data_json_path],
         message=args.commit_message,
         should_push=not args.no_push,
     )
