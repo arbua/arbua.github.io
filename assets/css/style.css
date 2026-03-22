@@ -157,6 +157,44 @@ html { font-family: var(--ff-poppins); }
 
 body { background: var(--smoky-black); }
 
+body.light-mode {
+  --jet: hsl(220, 12%, 82%);
+  --onyx: hsl(220, 20%, 97%);
+  --eerie-black-1: hsl(220, 24%, 99%);
+  --eerie-black-2: hsl(220, 22%, 96%);
+  --smoky-black: hsl(220, 20%, 98%);
+  --white-1: hsl(220, 26%, 12%);
+  --white-2: hsl(220, 22%, 18%);
+  --light-gray: hsl(220, 16%, 30%);
+  --light-gray-70: hsla(220, 16%, 30%, 0.75);
+  --bg-gradient-jet: linear-gradient(
+    to bottom right,
+    hsla(220, 20%, 96%, 0.95) 0%,
+    hsla(220, 18%, 92%, 0.65) 100%
+  ),
+  hsl(220, 22%, 97%);
+  --border-gradient-onyx: linear-gradient(
+    to bottom right,
+    hsl(220, 18%, 88%) 0%,
+    hsla(220, 18%, 88%, 0.3) 50%
+  );
+  --shadow-1: 0 8px 24px hsla(220, 15%, 30%, 0.08);
+  --shadow-2: 0 12px 28px hsla(220, 15%, 30%, 0.08);
+}
+
+body.light-mode .navbar {
+  background: hsla(220, 24%, 98%, 0.85);
+}
+
+body.light-mode .manage-cookies-btn {
+  background: hsla(220, 24%, 98%, 0.95);
+}
+
+body.light-mode .cookie-banner {
+  background: var(--eerie-black-2);
+  color: var(--white-1);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -276,6 +314,10 @@ body { background: var(--smoky-black); }
     right: 10px;
     font-size: 12px;
     padding: 8px 12px;
+  }
+
+  .swipe-hint {
+    display: block;
   }
 }
 
@@ -565,11 +607,36 @@ main {
   font-size: 18px;
 }
 
+.theme-toggle {
+  border: 1px solid var(--jet);
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-1);
+}
+
+.theme-toggle ion-icon {
+  font-size: 17px;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+  border-color: var(--orange-yellow-crayola);
+  color: var(--orange-yellow-crayola);
+}
+
 
 .social-item .social-link:hover { color: var(--light-gray); }
 
 .social-item img {
   filter: invert(60%) grayscale(100%);
+}
+
+body.light-mode .social-item img {
+  filter: none;
 }
 
 
@@ -631,6 +698,15 @@ main {
 }
 
 .about-text p { margin-bottom: 15px; }
+
+.swipe-hint {
+  display: none;
+  margin-top: -6px;
+  margin-bottom: 12px;
+  color: var(--light-gray-70);
+  font-size: var(--fs-7);
+  letter-spacing: 0.2px;
+}
 
 .yellow-link {
   display: inline-block; /* better for touch devices */

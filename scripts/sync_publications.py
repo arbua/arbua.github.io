@@ -440,7 +440,7 @@ def auto_download_publication_image(
         return ""
 
     publication_hash = hashlib.sha1(publication_key(publication.title, publication.year).encode("utf-8")).hexdigest()[:10]
-    base_name = f"paper-{publication_number}-auto-{publication_hash}"
+    base_name = f"paper-auto-{publication_hash}"
     papers_abs = repo_root / PAPERS_DIR
     papers_abs.mkdir(parents=True, exist_ok=True)
 
@@ -484,6 +484,28 @@ def auto_download_publication_image(
             continue
 
     return ""
+
+
+def apply_image_to_preserved_card(card_html: str, resolved_image_src: str, repo_root: Path) -> str:
+    if not resolved_image_src or "placehold.co" in resolved_image_src:
+        return card_html
+
+    image_src_pattern = re.compile(r'(<img\s+[^>]*src=")([^"]+)("[^>]*>)', flags=re.IGNORECASE)
+    match = image_src_pattern.search(card_html)
+    if not match:
+        return card_html
+
+    current_src = match.group(2)
+    should_replace = "placehold.co" in current_src
+
+    current_local_path = parse_local_paper_image_path(current_src)
+    if current_local_path and not (repo_root / current_local_path).exists():
+        should_replace = True
+
+    if not should_replace:
+        return card_html
+
+    return image_src_pattern.sub(rf'\1{resolved_image_src}\3', card_html, count=1)
 
 
 def resolve_publication_images(
@@ -694,6 +716,7 @@ def render_publications_html(
     publications: list[Publication],
     existing_cards: dict[str, str],
     preserve_existing_cards: bool,
+    repo_root: Path,
 ) -> str:
     lines: list[str] = []
     total_count = len(publications)
@@ -702,10 +725,15 @@ def render_publications_html(
         key = publication_key(publication.title, publication.year)
 
         if preserve_existing_cards and key in existing_cards:
+            preserved_card = apply_image_to_preserved_card(
+                card_html=existing_cards[key],
+                resolved_image_src=publication.image_src,
+                repo_root=repo_root,
+            )
             lines.extend(
                 [
                     f"            <!-- Publication {publication_number} -->",
-                    f"            {existing_cards[key]}",
+                    f"            {preserved_card}",
                     "",
                 ]
             )
@@ -872,6 +900,7 @@ def main() -> None:
         publications=publications,
         existing_cards=existing_cards,
         preserve_existing_cards=not args.no_preserve_existing,
+        repo_root=repo_root,
     )
     replace_publications_block(index_html_path=publications_html_path, publications_html=publications_html)
     write_publications_json(publications=publications, output_path=data_json_path)

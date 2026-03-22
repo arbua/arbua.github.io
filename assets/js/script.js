@@ -259,6 +259,35 @@ function initPublicationToggles() {
   });
 }
 
+function initThemeToggle() {
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  const themeIcon = document.querySelector('[data-theme-icon]');
+  if (!themeToggle || !themeIcon) return;
+
+  const storageKey = 'site-theme';
+
+  const updateThemeUI = function (isLightMode) {
+    themeIcon.setAttribute('name', isLightMode ? 'sunny-outline' : 'moon-outline');
+    themeToggle.setAttribute('aria-label', isLightMode ? 'Switch to dark mode' : 'Switch to light mode');
+    themeToggle.setAttribute('title', isLightMode ? 'Switch to dark mode' : 'Switch to light mode');
+  };
+
+  const applyTheme = function (isLightMode) {
+    document.body.classList.toggle('light-mode', isLightMode);
+    updateThemeUI(isLightMode);
+  };
+
+  const savedTheme = localStorage.getItem(storageKey);
+  const isLightMode = savedTheme === 'light';
+  applyTheme(isLightMode);
+
+  themeToggle.addEventListener('click', function () {
+    const nextIsLightMode = !document.body.classList.contains('light-mode');
+    applyTheme(nextIsLightMode);
+    localStorage.setItem(storageKey, nextIsLightMode ? 'light' : 'dark');
+  });
+}
+
 function initSite() {
   initSidebar();
   initTestimonialsModal();
@@ -266,6 +295,7 @@ function initSite() {
   initContactForm();
   initPageNavigation();
   initPublicationToggles();
+  initThemeToggle();
 }
 
 let siteInitialized = false;
